@@ -12,17 +12,31 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "downlevelIteration": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "_types/*": ["src/@types/*"],
+      "@api": ["src/api"],
+      "@components": ["src/app/components"],
+      "@assets": ["src/assets"],
+      "@styles": ["src/styles"],
+      "@constants": ["src/constants"],
+      "@atoms": ["src/atoms"],
+      "@models": ["src/models"],
+      "@utils": ["src/utils"],
+      "@hooks/*": ["src/hooks/*"],
+      "@pages/*": ["./pages/*"],
+      "@public/*": ["./public/*"]
+    },
+    "outDir": "./dist",
     "plugins": [
       {
         "name": "next"
       }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "@types/*", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", ".next"]
 }
