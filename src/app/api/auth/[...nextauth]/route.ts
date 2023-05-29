@@ -1,7 +1,8 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
+import { addUser } from 'src/service/user';
 
-const handler = NextAuth({
+export const handler = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_OAUTH_ID || '',
@@ -9,7 +10,13 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    // eslint-disable-next-line no-restricted-syntax
+    async signIn({ user: { id, name, image, email } }) {
+      if (!email) {
+        return false;
+      }
+      addUser({ id, name: name || '', image, email, username: email.split('@')[0] });
+      return true;
+    },
     async session({ session }) {
       console.log(session);
       const user = session?.user;
@@ -28,4 +35,3 @@ const handler = NextAuth({
 });
 
 export { handler as GET, handler as POST };
-//export default NextAuth(authOptions);
