@@ -1,8 +1,9 @@
-import NextAuth from 'next-auth';
+/* eslint-disable no-restricted-syntax */
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { addUser } from 'src/service/user';
 
-export const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_OAUTH_ID || '',
@@ -14,11 +15,16 @@ export const handler = NextAuth({
       if (!email) {
         return false;
       }
-      addUser({ id, name: name || '', image, email, username: email.split('@')[0] });
+      addUser({
+        id,
+        name: name || '',
+        image,
+        email,
+        username: email.split('@')[0],
+      });
       return true;
     },
     async session({ session }) {
-      console.log(session);
       const user = session?.user;
       if (user) {
         session.user = {
@@ -26,12 +32,12 @@ export const handler = NextAuth({
           username: user.email?.split('@')[0] || '',
         };
       }
+      console.log(`session : ${JSON.stringify(session)}`);
       return session;
     },
   },
   pages: {
     signIn: '/auth/signin',
   },
-});
-
-export { handler as GET, handler as POST };
+};
+export default NextAuth(authOptions);

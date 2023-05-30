@@ -63,7 +63,7 @@
   },
   "overrides": [
     {
-      "files": ["./src/app/**/*"],
+      "files": ["./src/app/**/*", "./src/components/**/*"],
       "rules": {
         "no-restricted-syntax": 0
       }
