@@ -8,7 +8,6 @@ type OAuthUser = {
   image?: string | null;
 };
 
-// eslint-disable-next-line no-restricted-syntax
 export async function addUser({ id, username, email, name, image }: OAuthUser) {
   return client.createIfNotExists({
     _id: id,
@@ -23,6 +22,14 @@ export async function addUser({ id, username, email, name, image }: OAuthUser) {
   });
 }
 
-// export async function getUserByUsername(username: string) {
-//   return client.fetch()
-// }
+export async function getUserByUsername(username: string) {
+  return client.fetch(
+    `*[_type == "user" && username == "${username}"][0]{
+      ...,
+      "id":_id,
+      following[]->{username, image},
+      followers[]->{username, image},
+      "bookmarks":bookmarks[]->_id,
+    }`,
+  );
+}
